@@ -1,6 +1,6 @@
 # Chatbot IA com Feedback Inteligente
 
-Sistema de chatbot com inteligência artificial que inclui funcionalidades de feedback em tempo real para melhorias contínuas do prompt. Desenvolvido como teste técnico para vaga de estágio em desenvolvimento.
+Sistema de chatbot com inteligência artificial que inclui funcionalidades de feedback em tempo real para melhorias contínuas do prompt. 
 
 ## Descrição
 
