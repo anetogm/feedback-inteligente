@@ -1,441 +1,102 @@
-# Chatbot IA com Feedback Inteligente
+# Feedback Inteligente
 
-Sistema de chatbot com inteligência artificial que inclui funcionalidades de feedback em tempo real para melhorias contínuas do prompt. 
+Chatbot com inteligência artificial que combina function calling, integrações externas, armazenamento vetorial e um ciclo de feedback para evolução contínua do prompt do sistema.
 
-## Descrição
+## Principais recursos
 
-Este projeto implementa um assistente virtual inteligente que:
+- Conversação com Google Gemini 2.5 Flash
+- Function calling nativo para uso de ferramentas externas
+- Contexto semântico com ChromaDB
+- Histórico persistente de conversas
+- Coleta e processamento de feedback dos usuários
+- Versionamento e atualização automática do prompt
+- Interface web com Streamlit
+- Execução local ou via Docker
 
-- Conversa naturalmente com usuários usando IA (Google Gemini 2.5 Flash)
-- Utiliza function calling nativo para integração automática com ferramentas externas
-- Aprende e melhora continuamente através de feedbacks dos usuários
-- Armazena contexto em vector store para respostas mais relevantes
+## Integrações
 
-## Funcionalidades Principais
+O assistente pode consultar serviços externos como:
 
-### Chat Interativo
+- ViaCEP
+- PokéAPI
+- IBGE
+- Open-Meteo
+- TVMaze
+- Open Library
+- Lyrics.ovh
 
-- Interface de chat moderna e responsiva
-- Histórico de mensagens persistente
-- Respostas contextualizadas usando vector store (ChromaDB)
-- Integração automática com ferramentas externas
+## Arquitetura
 
-### Ferramentas Integradas
-
-O sistema utiliza **function calling nativo do Google Gemini**, que permite ao modelo decidir automaticamente quando usar cada ferramenta:
-
-1. **ViaCEP** - Consulta de CEPs brasileiros
-
-   - Retorna endereço completo a partir do CEP
-   - Informações: logradouro, bairro, cidade, UF, DDD
-
-2. **PokéAPI** - Informações sobre Pokémon
-
-   - Consulta por nome ou número da Pokédex
-   - Dados: tipos, habilidades, estatísticas, altura, peso
-
-3. **IBGE** - Dados geográficos do Brasil
-
-   - Informações sobre estados brasileiros
-   - Dados de municípios e regiões
-   - Códigos IBGE e divisões administrativas
-
-4. **Open-Meteo** - Clima e previsão do tempo
-
-   - Clima atual de qualquer cidade do mundo
-   - Previsão para os próximos 3 dias
-   - Temperatura, umidade, vento e precipitação
-
-5. **TVMaze** - Informações sobre séries de TV
-
-   - Dados detalhados sobre séries
-   - Gêneros, status, ratings e sinopse
-   - Informações de rede e horário de exibição
-
-6. **Open Library** - Informações sobre livros
-
-   - Busca por título ou autor
-   - ISBN, editora, ano de publicação
-   - Categorias e número de páginas
-
-7. **Lyrics.ovh** - Letras de músicas
-   - Busca por artista e música
-   - Letras completas de músicas
-
-### Sistema de Feedback Inteligente
-
-- Captura feedback do usuário em tempo real
-- **Processamento automático**: atualiza o prompt automaticamente quando:
-  - Acumula 3 ou mais feedbacks pendentes
-  - Recebe feedbacks muito negativos (média < 3.0)
-- Análise automática de feedbacks usando IA
-- Processamento manual também disponível (botão)
-- Atualização dinâmica do prompt do sistema
-- Histórico completo de versões de prompt
-- Visualização de melhorias aplicadas
-
-### Histórico de Conversas
-
-- **Sessões independentes**: Cada vez que você atualiza a página, uma nova sessão é iniciada
-- **Salvamento automático**: Todas as mensagens são salvas automaticamente no histórico permanente
-- **Navegação por sessões**: Visualize conversas anteriores organizadas por sessão
-- **Detalhes completos**: Veja perguntas, respostas e ferramentas utilizadas em cada conversa
-- **Estatísticas**: Acompanhe o total de sessões e respostas do assistente
-- **Exportação**: Exporte o histórico completo em formato JSON
-- **Gerenciamento**: Delete sessões individuais ou limpe todo o histórico
-
-**Recursos:**
-- Filtro de ferramentas usadas por sessão
-- Timestamp de cada conversa
-- Organização cronológica (mais recentes primeiro)
-- Visualização expandível para economizar espaço
-- Botão "Limpar Conversa" inicia nova sessão mantendo histórico
-
-### Vector Store
-
-- Armazenamento de contexto usando ChromaDB
-- Busca semântica de conversas anteriores
-- Base de conhecimento sobre capacidades do sistema
-- Recuperação de informações relevantes para contexto
-
-## Arquitetura do Projeto
-
-```
-tt-blueelephant/
+```text
+feedback-inteligente/
 ├── src/
-│   ├── agent/
-│   │   ├── chatbot.py              # Agente principal com LLM e function calling
-│   │   └── prompt_manager.py       # Gerenciador de prompts e versionamento
-│   ├── feedback/
-│   │   └── feedback_processor.py   # Processador inteligente de feedback
-│   ├── tools/
-│   │   ├── viacep_tool.py          # Ferramenta ViaCEP
-│   │   ├── pokemon_tool.py         # Ferramenta PokéAPI
-│   │   ├── ibge_tool.py            # Ferramenta IBGE
-│   │   ├── balldontlie_tool.py     # Ferramenta NBA
-│   │   ├── openmeteo_tool.py       # Ferramenta Open-Meteo
-│   │   ├── tvmaze_tool.py          # Ferramenta TVMaze
-│   │   ├── openlibrary_tool.py     # Ferramenta Open Library
-│   │   └── lyricsovh_tool.py       # Ferramenta Lyrics.ovh
-│   └── vectorstore/
-│       └── chroma_store.py         # Vector store ChromaDB
-├── data/                         # Dados persistentes (criado automaticamente)
-├── tests/                        # Testes unitários
-├── app.py                        # Aplicação Streamlit
-├── requirements.txt              # Dependências Python
-├── Dockerfile                    # Container Docker
-├── docker-compose.yml            # Orquestração Docker
-├── .env.example                  # Exemplo de variáveis de ambiente
-└── README.md                     # Este arquivo
+│   ├── agent/          # Lógica do agente e gerenciamento de prompts
+│   ├── feedback/       # Processamento de feedback
+│   ├── tools/          # Integrações externas
+│   └── vectorstore/    # ChromaDB
+├── data/               # Histórico persistente
+├── tests/
+├── app.py              # Aplicação Streamlit
+├── requirements.txt
+├── Dockerfile
+├── docker-compose.yml
+└── .env.example
 ```
 
-## Instalação e Execução
+## Tech Stack
 
-### Pré-requisitos
+- Python
+- Google Gemini 2.5 Flash
+- ChromaDB
+- Streamlit
+- Docker / Docker Compose
+- pytest
 
-- Python 3.9+ ou Docker
-- Chave de API do Google Gemini ([obter aqui](https://makersuite.google.com/app/apikey))
+## Execução local
 
-### Opção 1: Execução Local com Python
-
-1. **Clone o repositório**
-
-```bash
-git clone https://github.com/seu-usuario/tt-blueelephant.git
-cd tt-blueelephant
-```
-
-2. **Crie um ambiente virtual**
+Clone o repositório e instale as dependências:
 
 ```bash
-python -m venv venv
-# Windows
-venv\Scripts\activate
-# Linux/Mac
-source venv/bin/activate
-```
-
-3. **Instale as dependências**
-
-```bash
+git clone https://github.com/anetogm/feedback-inteligente.git
+cd feedback-inteligente
+python -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
-4. **Configure a API Key**
+Configure a chave do Gemini:
 
 ```bash
-# Copie o arquivo de exemplo
 cp .env.example .env
-
-# Edite .env e adicione sua chave:
-# GEMINI_API_KEY=sua_chave_aqui
 ```
 
-Ou defina diretamente no terminal:
-
-```bash
-# Windows
-set GEMINI_API_KEY=sua_chave_aqui
-
-# Linux/Mac
-export GEMINI_API_KEY=sua_chave_aqui
-```
-
-5. **Execute a aplicação**
+Depois execute:
 
 ```bash
 streamlit run app.py
 ```
 
-A aplicação estará disponível em `http://localhost:8501`
+A aplicação ficará disponível normalmente em `http://localhost:8501`.
 
-### Opção 2: Execução com Docker (Recomendado)
-
-1. **Clone o repositório**
+## Docker
 
 ```bash
-git clone https://github.com/seu-usuario/tt-blueelephant.git
-cd tt-blueelephant
-```
-
-2. **Configure a API Key**
-
-```bash
-# Crie arquivo .env
 cp .env.example .env
-
-# Edite .env e adicione sua chave do Gemini
+docker compose up -d --build
 ```
-
-3. **Execute com Docker Compose**
-
-```bash
-docker-compose up -d
-```
-
-4. **Acesse a aplicação**
-
-```
-http://localhost:8501
-```
-
-5. **Para parar a aplicação**
-
-```bash
-docker-compose down
-```
-
-### Comandos Docker Úteis
-
-```bash
-# Ver logs
-docker-compose logs -f
-
-# Rebuild após mudanças no código
-docker-compose up -d --build
-
-# Remover volumes (limpar dados)
-docker-compose down -v
-```
-
-## Como Usar
-
-### 1. Chat com o Assistente
-
-Digite suas perguntas no campo de entrada. O assistente responderá usando IA e ferramentas quando apropriado.
-
-**Exemplos de uso:**
-
-- "Qual o endereço do CEP 01310-100?"
-- "Me fale sobre o Pikachu"
-- "Como está o clima em São Paulo?"
-- "Informações sobre o estado de SP"
-- "Me fale sobre a série Breaking Bad"
-- "Informações sobre o livro 1984"
-- "Letra de Bohemian Rhapsody do Queen"
-
-### 2. Dar Feedback
-
-- Navegue até a aba "Feedback e Melhorias"
-- Selecione uma resposta recente do assistente
-- Avalie de 1 a 5 estrelas
-- Escreva sugestões de melhoria
-- Envie o feedback
-
-### 3. Atualizar Prompt
-
-- Após enviar feedback, marque a opção "Processar feedback agora"
-- O sistema analisará os feedbacks e atualizará o prompt automaticamente
-- Visualize as melhorias aplicadas
-- Verifique a nova versão do prompt na aba "Prompt Atual"
-
-### 4. Visualizar Histórico de Conversas
-
-- Navegue até a aba "Histórico de Conversas"
-- Veja todas as sessões anteriores organizadas cronologicamente
-- Expanda cada sessão para ver as conversas completas
-- Visualize quais ferramentas foram usadas em cada resposta
-- Exporte o histórico completo clicando em "Exportar Histórico (JSON)"
-- Delete sessões individuais ou limpe todo o histórico
-
-**Recursos disponíveis:**
-- Contador de sessões e respostas totais
-- Detalhes de cada ferramenta utilizada
-- Timestamps de cada conversa
-- Opção de mostrar/ocultar ferramentas usadas
-
-### 5. Visualizar Histórico de Feedbacks e Prompts
-
-- Aba "Histórico Feedbacks": veja todos os feedbacks enviados
-- Aba "Prompt Atual": veja versões anteriores do prompt
-- Estatísticas na barra lateral: métricas em tempo real
 
 ## Testes
 
 ```bash
-# Instalar dependências de teste
-pip install pytest pytest-cov
-
-# Executar testes
 pytest
+```
 
-# Com cobertura
+Com cobertura:
+
+```bash
 pytest --cov=src tests/
 ```
 
-## APIs Utilizadas
+## Objetivo técnico
 
-Todas as APIs utilizadas são **gratuitas e sem necessidade de autenticação** (exceto Google Gemini):
-
-### Google Gemini API
-
-- **Descrição**: Modelo de linguagem para geração de respostas e function calling
-- **Documentação**: https://ai.google.dev/docs
-- **Requer API Key**: Sim (gratuita com limites)
-
-### ViaCEP
-
-- **Descrição**: Consulta de CEPs brasileiros
-- **Documentação**: https://viacep.com.br/
-- **Exemplo**: `https://viacep.com.br/ws/01310100/json/`
-
-### PokéAPI
-
-- **Descrição**: Informações sobre Pokémon
-- **Documentação**: https://pokeapi.co/docs/v2
-- **Exemplo**: `https://pokeapi.co/api/v2/pokemon/pikachu`
-
-### IBGE API
-
-- **Descrição**: Dados geográficos do Brasil
-- **Documentação**: https://servicodados.ibge.gov.br/api/docs
-- **Exemplo**: `https://servicodados.ibge.gov.br/api/v1/localidades/estados/SP`
-
-### Open-Meteo API
-
-- **Descrição**: Previsão do tempo e clima
-- **Documentação**: https://open-meteo.com/
-- **Exemplo**: `https://api.open-meteo.com/v1/forecast`
-
-### TVMaze API
-
-- **Descrição**: Informações sobre séries de TV
-- **Documentação**: https://www.tvmaze.com/api
-- **Exemplo**: `https://api.tvmaze.com/search/shows?q=breaking+bad`
-
-### Open Library API
-
-- **Descrição**: Informações sobre livros
-- **Documentação**: https://openlibrary.org/developers/api
-- **Exemplo**: `https://openlibrary.org/search.json?q=1984`
-
-### Lyrics.ovh API
-
-- **Descrição**: Letras de músicas
-- **Documentação**: https://lyricsovh.docs.apiary.io/
-- **Exemplo**: `https://api.lyrics.ovh/v1/coldplay/yellow`
-
-## Tecnologias Utilizadas
-
-### Backend
-
-- **Python 3.11**: Linguagem principal
-- **Google Gemini 2.5 Flash**: Modelo de linguagem com function calling
-- **ChromaDB**: Vector store para embeddings e busca semântica
-- **Requests**: Cliente HTTP para APIs externas
-
-### Frontend
-
-- **Streamlit**: Framework para interface web interativa
-
-### DevOps
-
-- **Docker**: Containerização da aplicação
-- **Docker Compose**: Orquestração de containers
-
-### Testes
-
-- **pytest**: Framework de testes
-- **pytest-cov**: Cobertura de código
-
-## Estrutura de Dados
-
-### Prompts History (`data/prompts_history.json`)
-
-```json
-[
-  {
-    "version": 1,
-    "prompt": "Você é um assistente...",
-    "timestamp": "2024-12-13T10:00:00",
-    "feedback_count": 5,
-    "improvements": ["Melhoria 1", "Melhoria 2"]
-  }
-]
-```
-
-### Feedbacks (`data/feedbacks.json`)
-
-```json
-[
-  {
-    "id": 1,
-    "timestamp": "2024-12-13T10:30:00",
-    "user_message": "Qual o CEP...",
-    "agent_response": "O CEP é...",
-    "feedback_text": "Resposta muito boa!",
-    "rating": 5,
-    "processed": false
-  }
-]
-```
-
-### Conversas (`data/conversations.json`)
-
-```json
-{
-  "sessions": [
-    {
-      "session_id": "uuid-aqui",
-      "started_at": "2024-12-15T10:00:00",
-      "last_updated": "2024-12-15T10:15:00",
-      "messages": [
-        {
-          "role": "user",
-          "content": "Qual o clima em São Paulo?",
-          "timestamp": "2024-12-15T10:00:00"
-        },
-        {
-          "role": "assistant",
-          "content": "O clima em São Paulo...",
-          "timestamp": "2024-12-15T10:00:05",
-          "tools_used": [["consulta_clima", "São Paulo"]],
-          "tools_output": "**Resultado da ferramenta..."
-        }
-      ],
-      "message_count": 2
-    }
-  ],
-  "last_updated": "2024-12-15T10:15:00"
-}
-```
+O projeto explora agentes com ferramentas, memória semântica, persistência de contexto e uso de feedback para modificar dinamicamente o comportamento de um sistema baseado em LLM.
